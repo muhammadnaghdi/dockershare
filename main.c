@@ -80,9 +80,9 @@ bool btree_search(node* root, int key) {
 void keys_sort(int* keys, int keys_size) {
 	for (int i = 0; i < keys_size - 1; ++i) {
 		for (int j = 0; j < keys_size - i - 1; ++j) {
-			if (keys[j] > keys[i]) {
-				int tmp = keys[i];
-				keys[i] = keys[j];
+			if (keys[j] > keys[j + 1]) {
+				int tmp = keys[j + 1];
+				keys[j + 1] = keys[j];
 				keys[j] = tmp;
 			}
 		}
@@ -91,12 +91,9 @@ void keys_sort(int* keys, int keys_size) {
 }
 
 void keys_insert(int* keys, int keys_size, int key) {
-	int* new = (int*) malloc(sizeof(int) * (keys_size + 1));
-	memcpy(new, keys, sizeof(int) * keys_size);
-	new[keys_size] = key;
-	keys_sort(new, keys_size + 1);
-	free(keys);
-	keys = new;
+	keys = realloc(keys ,sizeof(int) * (keys_size + 1));
+	keys[keys_size] = key;
+	keys_sort(keys, keys_size + 1);
 	return;
 }
 
@@ -124,6 +121,6 @@ void btree_insert(node* root, int key) {
 int main() {
 	node* root = btree_create();
 	btree_insert(root, 1100);
-	printf("%d", btree_search(root, 1100));
+	printf("%d\n", btree_search(root, 1100));
 	return 0;
 }
